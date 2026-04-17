@@ -3,30 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartAdBD Pro</title>
+    <title>SmartAdBD Premium</title>
     <script src="https://telegram.org"></script>
+    <script src="https://tailwindcss.com"></script>
+    <link href="https://cloudflare.com" rel="stylesheet">
     <style>
-        body { background: #000; color: #fff; font-family: sans-serif; text-align: center; margin: 0; padding: 15px; }
-        .header { background: linear-gradient(145deg, #1a1a1a, #000); padding: 20px; border-radius: 20px; border: 1px solid #ffd700; margin-bottom: 20px; box-shadow: 0 0 15px #ffd70033; }
-        .balance-amount { font-size: 45px; font-weight: bold; color: #ffd700; text-shadow: 0 0 10px #ffd700; }
-        .task-card { background: #111; padding: 20px; border-radius: 15px; border-bottom: 3px solid #ffd700; margin-bottom: 15px; }
-        .withdraw-btn { background: #ffd700; color: #000; padding: 15px; border-radius: 12px; font-weight: bold; display: block; text-decoration: none; margin-top: 20px; }
+        body { background-color: #050505; color: white; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
+        .gold-border { border: 1px solid rgba(255, 215, 0, 0.3); }
+        .glass { background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(10px); }
+        .btn-prime { background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%); color: black; font-weight: bold; }
+        @keyframes pulse-gold { 0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); } }
+        .animate-gold { animation: pulse-gold 2s infinite; }
     </style>
 </head>
-<body>
-    <div class="header">
-        <div style="color: #ccc;">Smart Balance</div>
-        <div class="balance-amount">৳ <span id="user_bal">0.00</span></div>
+<body class="p-4">
+    <!-- Profile Header -->
+    <div class="flex justify-between items-center mb-8">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-yellow-500 to-yellow-200 p-0.5">
+                <div class="w-full h-full rounded-full bg-black flex items-center justify-center">
+                    <i class="fas fa-user text-yellow-500"></i>
+                </div>
+            </div>
+            <div>
+                <p class="text-xs text-gray-500">Welcome back,</p>
+                <h2 id="username" class="font-bold text-sm uppercase tracking-wider">Loading...</h2>
+            </div>
+        </div>
+        <div class="glass px-3 py-1 rounded-full gold-border text-[10px] text-yellow-500">PREMIUM USER</div>
     </div>
-    <div class="task-card" onclick="alert('Ad loading...')">
-        <div style="font-size: 30px;">📺</div>
-        <div>Watch Prime Ads</div>
-        <div style="color: #ffd700; font-size: 12px;">Earn ৳ 2.00</div>
+
+    <!-- Balance Card -->
+    <div class="glass p-8 rounded-[2rem] gold-border text-center mb-6 relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl"></div>
+        <p class="text-gray-400 text-sm mb-2">Total Earnings</p>
+        <h1 class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-600">৳ <span id="balance">0.00</span></h1>
     </div>
-    <a href="#" class="withdraw-btn">💸 Withdraw Cash</a>
+
+    <!-- Task Section -->
+    <div class="space-y-4">
+        <div onclick="startTask()" class="glass p-5 rounded-3xl gold-border flex justify-between items-center animate-gold cursor-pointer">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-yellow-500 flex items-center justify-center text-black">
+                    <i class="fas fa-play text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold">Watch Prime Ads</h3>
+                    <p class="text-xs text-gray-500">Earn 5.00 BDT per ad</p>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right text-yellow-500"></i>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div class="glass p-4 rounded-3xl gold-border text-center">
+                <i class="fas fa-wallet text-yellow-500 mb-2"></i>
+                <p class="text-[10px] text-gray-500">Withdraw</p>
+            </div>
+            <div class="glass p-4 rounded-3xl gold-border text-center">
+                <i class="fas fa-share-alt text-yellow-500 mb-2"></i>
+                <p class="text-[10px] text-gray-500">Refer & Earn</p>
+            </div>
+        </div>
+    </div>
+
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand();
+        tg.expand(); // Full screen setup
+        document.getElementById('username').innerText = tg.initDataUnsafe.user?.first_name || "AL AMIN VAI";
+
+        function startTask() {
+            tg.showConfirm("Are you ready to watch an ad?", (ok) => {
+                if(ok) {
+                    alert("Ad is loading... (এখানে তোর Adsterra লিঙ্ক বসবে)");
+                }
+            });
+        }
     </script>
 </body>
 </html>
