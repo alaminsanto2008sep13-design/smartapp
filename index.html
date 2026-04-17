@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartAdBD Pro</title>
+    <script src="https://telegram.org"></script>
+    <style>
+        body { background: #000; color: #fff; font-family: sans-serif; text-align: center; margin: 0; padding: 15px; }
+        .header { background: linear-gradient(145deg, #1a1a1a, #000); padding: 20px; border-radius: 20px; border: 1px solid #ffd700; margin-bottom: 20px; box-shadow: 0 0 15px #ffd70033; }
+        .balance-amount { font-size: 45px; font-weight: bold; color: #ffd700; text-shadow: 0 0 10px #ffd700; }
+        .task-card { background: #111; padding: 20px; border-radius: 15px; border-bottom: 3px solid #ffd700; margin-bottom: 15px; }
+        .withdraw-btn { background: #ffd700; color: #000; padding: 15px; border-radius: 12px; font-weight: bold; display: block; text-decoration: none; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div style="color: #ccc;">Smart Balance</div>
+        <div class="balance-amount">৳ <span id="user_bal">0.00</span></div>
+    </div>
+    <div class="task-card" onclick="alert('Ad loading...')">
+        <div style="font-size: 30px;">📺</div>
+        <div>Watch Prime Ads</div>
+        <div style="color: #ffd700; font-size: 12px;">Earn ৳ 2.00</div>
+    </div>
+    <a href="#" class="withdraw-btn">💸 Withdraw Cash</a>
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+    </script>
+</body>
+</html>
