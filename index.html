@@ -3,137 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Earn Pro</title>
-    <script src="https://telegram.org"></script>
-    <script src="https://tailwindcss.com"></script>
-    <link href="https://cloudflare.com" rel="stylesheet">
+    <title>Smart Earn Pro</title>
     <style>
-        body { background-color: #080808; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        .glass-card { background: rgba(20, 20, 20, 0.9); border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 24px; }
-        .nav-item { color: #666; transition: 0.3s; cursor: pointer; }
-        .active-nav { color: #FFD700 !important; }
-        .page { display: none; animation: fadeIn 0.4s ease-in-out; }
-        .active-page { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .gold-btn { background: linear-gradient(90deg, #FFD700, #B8860B); color: black; font-weight: bold; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f172a; color: white; padding-bottom: 80px; }
+        .header { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 25px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); position: sticky; top: 0; z-index: 100; }
+        .balance-box { background: rgba(56, 189, 248, 0.1); padding: 15px; border-radius: 20px; margin-top: 15px; border: 1px solid #38bdf8; }
+        .balance-box h2 { color: #38bdf8; font-size: 32px; margin-top: 5px; }
+        .section { padding: 20px; display: none; animation: fadeIn 0.5s; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .card { background: #1e293b; padding: 20px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #334155; text-align: center; }
+        .btn-main { background: #38bdf8; color: #0f172a; border: none; padding: 15px; border-radius: 12px; font-weight: bold; width: 100%; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top: 10px; }
+        .btn-main:disabled { background: #64748b; cursor: not-allowed; }
+        input, select { width: 100%; padding: 12px; border-radius: 10px; margin-bottom: 12px; background: #0f172a; color: white; border: 1px solid #334155; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1e293b; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #334155; box-shadow: 0 -2px 10px rgba(0,0,0,0.3); }
+        .nav-item { color: #94a3b8; font-size: 12px; text-align: center; flex: 1; cursor: pointer; }
+        .nav-item.active-nav { color: #38bdf8; font-weight: bold; }
+        .nav-item span { font-size: 22px; display: block; margin-bottom: 3px; }
     </style>
 </head>
-<body class="pb-24">
+<body>
 
-    <!-- Home Page -->
-    <div id="home-page" class="page active-page p-5">
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-xl font-black text-yellow-500 tracking-tighter">SMART EARN PRO</h1>
-            <div class="glass-card px-4 py-1 text-[10px] border-yellow-500/50 text-yellow-500">PREMIUM</div>
-        </div>
-        
-        <div class="glass-card p-8 text-center mb-6 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-20 h-20 bg-yellow-500/10 rounded-full blur-2xl"></div>
-            <p class="text-gray-400 text-xs uppercase tracking-widest">Available Balance</p>
-            <h2 class="text-5xl font-black text-white mt-2">৳ <span id="balance">0.00</span></h2>
-        </div>
-
-        <div onclick="showPage('task-page')" class="glass-card p-5 flex justify-between items-center bg-gradient-to-r from-yellow-500/10 to-transparent border-l-4 border-l-yellow-500">
-            <div class="flex items-center gap-4">
-                <i class="fas fa-bolt text-2xl text-yellow-500"></i>
-                <div>
-                    <h3 class="font-bold">Start Task</h3>
-                    <p class="text-[10px] text-gray-500">Watch Ads & Earn 5 Taka</p>
-                </div>
-            </div>
-            <i class="fas fa-chevron-right text-gray-600"></i>
+    <div class="header">
+        <p>স্বাগতম, <span id="user-name" style="color:#38bdf8;">মেম্বার</span> 👋</p>
+        <div class="balance-box">
+            <p>আপনার ব্যালেন্স</p>
+            <h2 id="user-balance">৳ 0.00</h2>
         </div>
     </div>
 
-    <!-- Task Page -->
-    <div id="task-page" class="page p-5">
-        <h2 class="text-2xl font-bold mb-6">Daily Tasks</h2>
-        <div class="glass-card p-8 text-center border-dashed border-2 border-yellow-500/30">
-            <div class="w-20 h-20 bg-yellow-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-play text-3xl text-yellow-500"></i>
-            </div>
-            <h3 class="font-bold text-lg text-yellow-500">Watch Video Ad</h3>
-            <p class="text-gray-500 text-xs mt-1 mb-6">Complete the video to get reward</p>
-            <button onclick="watchAd()" class="gold-btn w-full py-4 rounded-2xl shadow-lg shadow-yellow-500/20">WATCH NOW</button>
+    <!-- HOME -->
+    <div id="home" class="section active">
+        <div class="card">
+            <h3 style="color:#38bdf8;">আজকের নোটিশ 📢</h3>
+            <p style="margin-top:10px; font-size:14px; color:#94a3b8;">প্রতিটি ভিডিও অ্যাডে ২০ পয়সা! ২০ টাকা হলেই বিকাশ বা নগদে পেমেন্ট নিতে পারবেন। বেশি আয় করতে বন্ধুদের রেফার করুন।</p>
+        </div>
+        <div class="card">
+            <h3>কিভাবে কাজ করবেন? 🤔</h3>
+            <p style="font-size:13px; color:#94a3b8; margin-top:5px;">'আয় করুন' বাটনে ক্লিক করে ২০ সেকেন্ড অপেক্ষা করুন, এরপর অ্যাড দেখলে আপনার ব্যালেন্সে টাকা যোগ হবে।</p>
         </div>
     </div>
 
-    <!-- Withdraw Page -->
-    <div id="withdraw-page" class="page p-5">
-        <h2 class="text-2xl font-bold mb-6">Cash Out</h2>
-        <div class="glass-card p-6 space-y-5">
-            <div>
-                <label class="text-xs text-gray-500 ml-1">Payment Method</label>
-                <select id="method" class="w-full bg-black border border-gray-800 p-4 rounded-2xl mt-1 text-white focus:border-yellow-500 outline-none">
-                    <option>Bkash</option>
-                    <option>Nagad</option>
-                    <option>Rocket</option>
-                </select>
-            </div>
-            <div>
-                <label class="text-xs text-gray-500 ml-1">Account Number</label>
-                <input type="number" id="phone" placeholder="017XXXXXXXX" class="w-full bg-black border border-gray-800 p-4 rounded-2xl mt-1 text-white focus:border-yellow-500 outline-none">
-            </div>
-            <div>
-                <label class="text-xs text-gray-500 ml-1">Amount</label>
-                <input type="number" id="amount" placeholder="Min 200 BDT" class="w-full bg-black border border-gray-800 p-4 rounded-2xl mt-1 text-white focus:border-yellow-500 outline-none">
-            </div>
-            <button onclick="requestWithdraw()" class="gold-btn w-full py-4 rounded-2xl mt-4">SUBMIT REQUEST</button>
+    <!-- EARN -->
+    <div id="earn" class="section">
+        <div class="card">
+            <span style="font-size: 50px;">📺</span>
+            <h3 style="margin: 10px 0;">ভিডিও দেখে আয় করুন</h3>
+            <p style="color:#94a3b8; margin-bottom: 15px;">২০ সেকেন্ডের ভিডিও দেখুন</p>
+            <button id="ad-btn" class="btn-main" onclick="startTask()">Watch Ad</button>
         </div>
     </div>
 
-    <!-- Bottom Navigation -->
-    <div class="fixed bottom-0 w-full bg-black/90 backdrop-blur-lg border-t border-gray-900 flex justify-around py-4 px-2 z-50">
-        <div id="nav-home" onclick="showPage('home-page')" class="nav-item active-nav flex flex-col items-center">
-            <i class="fas fa-home text-lg"></i>
-            <span class="text-[10px] mt-1 font-medium">Home</span>
+    <!-- WITHDRAW -->
+    <div id="withdraw" class="section">
+        <div class="card">
+            <h3>টাকা উত্তোলন 💸</h3>
+            <p style="color:#94a3b8; font-size:12px; margin-bottom:15px;">সর্বনিম্ন উইথড্র ২০ টাকা</p>
+            <select id="method">
+                <option value="bkash">বিকাশ (bKash)</option>
+                <option value="nagad">নগদ (Nagad)</option>
+            </select>
+            <input type="number" id="amount" placeholder="টাকার পরিমাণ (উদা: ২০)">
+            <input type="text" id="phone" placeholder="মোবাইল নম্বর">
+            <button class="btn-main" onclick="submitWithdraw()">উইথড্র রিকোয়েস্ট</button>
         </div>
-        <div id="nav-task" onclick="showPage('task-page')" class="nav-item flex flex-col items-center">
-            <i class="fas fa-grid-2 text-lg"></i>
-            <span class="text-[10px] mt-1 font-medium">Task</span>
+    </div>
+
+    <!-- PROFILE -->
+    <div id="profile" class="section">
+        <div class="card">
+            <div style="width:80px; height:80px; background:#38bdf8; border-radius:50%; margin: 0 auto 15px; line-height:80px; font-size:30px;">👤</div>
+            <h3 id="prof-name">ইউজার প্রোফাইল</h3>
+            <p style="color:#94a3b8; margin-top:5px;">ID: #Smart001</p>
+            <hr style="margin:20px 0; border:0.1px solid #334155;">
+            <p>রেফার কোড: <b style="color:#38bdf8;">123456</b></p>
+            <button class="btn-main" style="background:#ef4444; color:white; margin-top:20px;">লগ আউট</button>
         </div>
-        <div id="nav-withdraw" onclick="showPage('withdraw-page')" class="nav-item flex flex-col items-center">
-            <i class="fas fa-wallet text-lg"></i>
-            <span class="text-[10px] mt-1 font-medium">Withdraw</span>
-        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="bottom-nav">
+        <div class="nav-item active-nav" onclick="showSection('home', this)"><span>🏠</span>হোম</div>
+        <div class="nav-item" onclick="showSection('earn', this)"><span>💰</span>আয় করুন</div>
+        <div class="nav-item" onclick="showSection('withdraw', this)"><span>💸</span>উইথড্র</div>
+        <div class="nav-item" onclick="showSection('profile', this)"><span>👤</span>প্রোফাইল</div>
     </div>
 
     <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand();
+        let balance = 0.00;
+        const AD_LINK = "https://google.com"; // এখানে তোর Adsterra Direct Link টা বসাবি
 
-        function showPage(pageId) {
-            // Hide all pages
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            // Show selected page
-            document.getElementById(pageId).classList.add('active-page');
-            
-            // Update Navigation UI
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
-            if(pageId === 'home-page') document.getElementById('nav-home').classList.add('active-nav');
-            if(pageId === 'task-page') document.getElementById('nav-task').classList.add('active-nav');
-            if(pageId === 'withdraw-page') document.getElementById('nav-withdraw').classList.add('active-nav');
+        function showSection(sectionId, element) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active-nav'));
+            element.classList.add('active-nav');
         }
 
-        function watchAd() {
-            tg.showConfirm("ভিডিও অ্যাড দেখলে ৫ টাকা পাবেন। আপনি কি রাজি?", (ok) => {
-                if(ok) {
-                    // আপাতত ম্যানুয়ালি টাকা যোগ হচ্ছে
-                    let currentBal = parseFloat(document.getElementById('balance').innerText);
-                    document.getElementById('balance').innerText = (currentBal + 5.0).toFixed(2);
-                    tg.showAlert("Success! ৫ টাকা আপনার ব্যালেন্সে যোগ হয়েছে।");
-                    showPage('home-page');
+        function startTask() {
+            let btn = document.getElementById("ad-btn");
+            let timeLeft = 20;
+            btn.disabled = true;
+
+            let timer = setInterval(() => {
+                btn.innerHTML = `অপেক্ষা করুন (${timeLeft}s)`;
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    btn.disabled = false;
+                    btn.innerHTML = "Watch Ad";
+                    window.open(AD_LINK, "_blank");
+                    
+                    // রিওয়ার্ড যোগ
+                    balance += 0.20;
+                    document.getElementById("user-balance").innerHTML = `৳ ${balance.toFixed(2)}`;
+                    alert("অভিনন্দন! আপনি ২০ পয়সা পেয়েছেন।");
                 }
-            });
+            }, 1000);
         }
 
-        function requestWithdraw() {
-            let phone = document.getElementById('phone').value;
-            let amount = document.getElementById('amount').value;
-            if(phone && amount >= 200) {
-                tg.showAlert("আপনার উইথড্র রিকোয়েস্ট সফল হয়েছে। ২৪ ঘণ্টার মধ্যে পেমেন্ট পাবেন।");
+        function submitWithdraw() {
+            let amt = parseFloat(document.getElementById("amount").value);
+            let phn = document.getElementById("phone").value;
+            let mtd = document.getElementById("method").value;
+
+            if (isNaN(amt) || amt < 20) {
+                alert("সর্বনিম্ন ২০ টাকা হতে হবে!");
+            } else if (balance < amt) {
+                alert("পর্যাপ্ত ব্যালেন্স নেই!");
+            } else if (phn.length < 11) {
+                alert("সঠিক নম্বর দিন!");
             } else {
-                tg.showAlert("সঠিক তথ্য দিন। মিনিমাম উইথড্র ২০০ টাকা।");
+                alert(`আপনার ${amt} টাকার রিকোয়েস্ট সফল! ১২ ঘণ্টার মধ্যে ${mtd}-এ পেমেন্ট পাবেন।`);
+                balance -= amt;
+                document.getElementById("user-balance").innerHTML = `৳ ${balance.toFixed(2)}`;
             }
         }
     </script>
