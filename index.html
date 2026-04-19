@@ -91,63 +91,37 @@
     </div>
 
     <script>
-    let balance = 0.00;
-    // নিচে তোর Adsterra লিঙ্কটা বসাবি (কোটেশনের ভেতর)
-    const AD_LINK = "https://www.profitablecpmratenetwork.com/mnwb805ih?key=af7c117650f5e354d3b11b74c4f7e475"; 
-    const MY_ID = "8421907197"; 
-    const BOT_TOKEN = "8553316751:AAFWXYS4iJwiDmD1mxZaurPFUt4pIwuuMg4";
+    const AD_LINK = "https://profitablecpmratenetwork.com";
+        function startTask() {
+    let btn = document.getElementById("ad-btn");
+    let timeLeft = 20;
+    btn.disabled = true;
 
-    function showSection(sectionId, element) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(sectionId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active-nav'));
-        element.classList.add('active-nav');
-    }
+    // ১ম অ্যাডটি নতুন ট্যাবে খুলবে
+    window.open(AD_LINK, "_blank");
 
-    function startTask() {
-        let btn = document.getElementById("ad-btn");
-        let timeLeft = 20;
-        btn.disabled = true;
+    let timer = setInterval(() => {
+        btn.innerHTML = `অপেক্ষা করুন (${timeLeft}s)`;
+        timeLeft--;
 
-        let timer = setInterval(() => {
-            btn.innerHTML = `অপেক্ষা করুন (${timeLeft}s)`;
-            timeLeft--;
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            btn.disabled = false;
+            btn.innerHTML = "Watch Ad";
+            
+            // ২০ সেকেন্ড শেষ হলে ২য় অ্যাডটি খুলবে
+            window.open(AD_LINK, "_blank");
 
-            if (timeLeft < 0) {
-                clearInterval(timer);
-                btn.disabled = false;
-                btn.innerHTML = "Watch Ad";
-                window.open(AD_LINK, "_blank");
-                
-                balance += 0.20;
-                document.getElementById("user-balance").innerHTML = `৳ ${balance.toFixed(2)}`;
-                alert("অভিনন্দন! আপনি ২০ পয়সা বোনাস পেয়েছেন।");
+            // বটের ডাটাবেসে ২০ পয়সা সেভ করার জন্য সিগন্যাল পাঠানো
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.sendData("add_money");
             }
-        }, 1000);
-    }
 
-    function submitWithdraw() {
-        let amt = parseFloat(document.getElementById("amount").value);
-        let phn = document.getElementById("phone").value;
-        let mtd = document.getElementById("method").value;
-
-        if (isNaN(amt) || amt < 20) {
-            alert("সর্বনিম্ন ২০ টাকা হতে হবে!");
-            return;
+            alert("অভিনন্দন! আপনি ২০ পয়সা বোনাস পেয়েছেন।");
         }
-        if (balance < amt) {
-            alert("পর্যাপ্ত ব্যালেন্স নেই!");
-            return;
-        }
+    }, 1000);
+}
 
-        const text = `🔔 নতুন উইথড্র রিকোয়েস্ট!\n💰 পরিমাণ: ${amt} Tk\n📱 নম্বর: ${phn}\n🏦 মেথড: ${mtd}`;
-        fetch(`https://telegram.org{BOT_TOKEN}/sendMessage?chat_id=${MY_ID}&text=${encodeURIComponent(text)}`)
-        .then(() => {
-            alert("আপনার রিকোয়েস্ট সফল! ১২ ঘণ্টার মধ্যে পেমেন্ট পাবেন।");
-            balance -= amt;
-            document.getElementById("user-balance").innerHTML = `৳ ${balance.toFixed(2)}`;
-        });
-    }
 </script>
 </body>
 </html>
