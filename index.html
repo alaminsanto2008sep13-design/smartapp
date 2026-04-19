@@ -121,7 +121,23 @@
         }
     }, 1000);
 }
+function showSection(sectionId, element) {
+    // সব সেকশন হাইড করা
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+    });
 
+    // ক্লিক করা সেকশনটি দেখানো
+    document.getElementById(sectionId).classList.add('active');
+
+    // সব বাটন থেকে active ক্লাস সরানো
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // ক্লিক করা বাটনে active ক্লাস যোগ করা
+    element.classList.add('active');
+}
 </script>
 </body>
 </html>
