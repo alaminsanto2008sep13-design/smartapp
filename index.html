@@ -85,7 +85,6 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    // সেকশন পরিবর্তন করার ফাংশন
     function showSection(sectionId, element) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.getElementById(sectionId).classList.add('active');
@@ -93,7 +92,6 @@
         element.classList.add('active');
     }
 
-    // অ্যাড দেখা এবং টাকা যোগ করার ফাংশন
     function startTask() {
         let btn = document.getElementById("ad-btn");
         btn.disabled = true;
@@ -103,15 +101,11 @@
         let timer = setInterval(() => {
             btn.innerHTML = `অপেক্ষা করুন (${timeLeft}s)`;
             timeLeft--;
-
             if (timeLeft < 0) {
                 clearInterval(timer);
                 btn.innerHTML = "আয় করুন";
                 btn.disabled = false;
-
-                // বোটের ডাটাবেসে টাকা পাঠাবে
                 tg.sendData("add_money"); 
-
                 alert("অভিনন্দন! ২০ পয়সা যোগ হয়েছে।");
                 tg.close(); 
             }
