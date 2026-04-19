@@ -97,14 +97,26 @@
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         element.classList.add('active');
     }
-const tg = window.Telegram.WebApp; // টেলিগ্রাম বোটের সাথে কানেকশন
-tg.expand(); // অ্যাপটা বড় হয়ে ওপেন হবে
+const tg = window.Telegram.WebApp;
+tg.expand();
 
+// বাটন ক্লিক করার ফাংশন
+function showSection(sectionId, element) {
+    document.querySelectorAll('.section').forEach(s => {
+        s.classList.remove('active');
+    });
+    document.getElementById(sectionId).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(i => {
+        i.classList.remove('active');
+    });
+    element.classList.add('active');
+}
+
+// অ্যাড এবং ব্যালেন্স যোগ করার ফাংশন
 function startTask() {
     let btn = document.getElementById("ad-btn");
     btn.disabled = true;
 
-    // ১. অ্যাড ওপেন হবে
     window.open(AD_LINK, "_blank"); 
     let timeLeft = 40; 
     
@@ -117,14 +129,15 @@ function startTask() {
             btn.innerHTML = "আয় করুন";
             btn.disabled = false;
 
-            // ২. বোটের ডাটাবেসে টাকা পাঠানোর নির্দেশ
+            // বোটের ডাটাবেসে টাকা পাঠাবে
             tg.sendData("add_money"); 
 
-            alert("২০ পয়সা যোগ হয়েছে! এখন বোট চেক করুন।");
-            tg.close(); // অ্যাপ অটোমেটিক বন্ধ হয়ে বোটে ফিরে যাবে
+            alert("২০ পয়সা যোগ হয়েছে! বোটের ব্যালেন্স চেক করুন।");
+            tg.close(); 
         }
     }, 1000);
 }
+
     
 </script>
 </body>
