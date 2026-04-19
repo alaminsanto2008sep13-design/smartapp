@@ -97,44 +97,42 @@
         element.classList.add('active');
     }
 
-    function startTask() {
+    let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
+document.getElementById("user-balance").innerText = `৳ ${balance.toFixed(2)}`;
+
+function startTask() {
     let btn = document.getElementById("ad-btn");
-    let timeLeft = 20; // প্রথম অ্যাডের ২০ সেকেন্ড
     btn.disabled = true;
+    
+    // অ্যাপের ভেতরেই অ্যাড লোড করার জন্য একটি ছোট ফ্রেম তৈরি
+    let adFrame = document.createElement("iframe");
+    adFrame.src = AD_LINK;
+    adFrame.style.cssText = "position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; border:none; background:white;";
+    document.body.appendChild(adFrame);
 
-    // ১ম অ্যাড ওপেন হবে
-    window.open(AD_LINK, "_blank");
-
+    let timeLeft = 40; // মোট ৪০ সেকেন্ডের টাইমার (২টি অ্যাডের জন্য)
+    
     let timer = setInterval(() => {
-        btn.innerHTML = `১ম অ্যাড চলছে (${timeLeft}s)`;
+        // বাটনের লেখাটা ফ্রেমের উপরে দেখানোর জন্য (ঐচ্ছিক)
+        btn.innerHTML = `অ্যাড চলছে... (${timeLeft}s)`;
         timeLeft--;
 
         if (timeLeft < 0) {
             clearInterval(timer);
+            document.body.removeChild(adFrame); // অ্যাড সরিয়ে ফেলা
+            btn.innerHTML = "আয় করুন";
+            btn.disabled = false;
+
+            // ব্যালেন্স যোগ
+            balance += 0.20;
+            localStorage.setItem('user_balance', balance);
+            document.getElementById("user-balance").innerText = `৳ ${balance.toFixed(2)}`;
             
-            // ১ম অ্যাড শেষ, এবার ২য় অ্যাড শুরু
-            let timeLeft2 = 20;
-            let timer2 = setInterval(() => {
-                btn.innerHTML = `২য় অ্যাড চলছে (${timeLeft2}s)`;
-                timeLeft2--;
-
-                if (timeLeft2 < 0) {
-                    clearInterval(timer2);
-                    btn.innerHTML = "আয় করুন";
-                    btn.disabled = false;
-
-                    // ২য় অ্যাড ওপেন হবে
-                    window.open(AD_LINK, "_blank");
-
-                    // ২টা অ্যাড শেষ হওয়ার পর ২০ পয়সা যোগ হবে
-                    balance += 0.20;
-                    document.getElementById("user-balance").innerText = `৳ ${balance.toFixed(2)}`;
-                    alert("অভিনন্দন! ২টি অ্যাড সফলভাবে দেখেছেন এবং ২০ পয়সা বোনাস পেয়েছেন।");
-                }
-            }, 1000);
+            alert("অভিনন্দন! ২টি অ্যাড দেখা শেষ। ২০ পয়সা যোগ হয়েছে।");
         }
     }, 1000);
 }
+
 </script>
 </body>
 </html>
