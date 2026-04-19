@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
+    <script src="https://telegram.org"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartAdBD - Earn Money</title>
@@ -96,43 +97,35 @@
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         element.classList.add('active');
     }
-
-    let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
-document.getElementById("user-balance").innerText = `৳ ${balance.toFixed(2)}`;
+const tg = window.Telegram.WebApp; // টেলিগ্রাম বোটের সাথে কানেকশন
+tg.expand(); // অ্যাপটা বড় হয়ে ওপেন হবে
 
 function startTask() {
     let btn = document.getElementById("ad-btn");
     btn.disabled = true;
-    
-    // অ্যাপের ভেতরেই অ্যাড লোড করার জন্য একটি ছোট ফ্রেম তৈরি
-    let adFrame = document.createElement("iframe");
-    adFrame.src = AD_LINK;
-    adFrame.style.cssText = "position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; border:none; background:white;";
-    document.body.appendChild(adFrame);
 
-    let timeLeft = 40; // মোট ৪০ সেকেন্ডের টাইমার (২টি অ্যাডের জন্য)
+    // ১. অ্যাড ওপেন হবে
+    window.open(AD_LINK, "_blank"); 
+    let timeLeft = 40; 
     
     let timer = setInterval(() => {
-        // বাটনের লেখাটা ফ্রেমের উপরে দেখানোর জন্য (ঐচ্ছিক)
         btn.innerHTML = `অ্যাড চলছে... (${timeLeft}s)`;
         timeLeft--;
 
         if (timeLeft < 0) {
             clearInterval(timer);
-            document.body.removeChild(adFrame); // অ্যাড সরিয়ে ফেলা
             btn.innerHTML = "আয় করুন";
             btn.disabled = false;
 
-            // ব্যালেন্স যোগ
-            balance += 0.20;
-            localStorage.setItem('user_balance', balance);
-            document.getElementById("user-balance").innerText = `৳ ${balance.toFixed(2)}`;
-            
-            alert("অভিনন্দন! ২টি অ্যাড দেখা শেষ। ২০ পয়সা যোগ হয়েছে।");
+            // ২. বোটের ডাটাবেসে টাকা পাঠানোর নির্দেশ
+            tg.sendData("add_money"); 
+
+            alert("২০ পয়সা যোগ হয়েছে! এখন বোট চেক করুন।");
+            tg.close(); // অ্যাপ অটোমেটিক বন্ধ হয়ে বোটে ফিরে যাবে
         }
     }, 1000);
 }
-
+    
 </script>
 </body>
 </html>
