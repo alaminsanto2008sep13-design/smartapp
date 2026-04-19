@@ -91,37 +91,36 @@
     const AD_LINK = "https://profitablecpmratenetwork.com"; // এখানে তোর Adsterra Direct Link বসাবি
     let balance = 0.00;
 
-    function showSection(sectionId, element) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(sectionId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        element.classList.add('active');
-    }
+    const tg = window.Telegram.WebApp;
+tg.expand();
+
+function showSection(sectionId, element) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    element.classList.add('active');
+}
+
 function startTask() {
     let btn = document.getElementById("ad-btn");
     btn.disabled = true;
-
-    // মেম্বারকে মেসেজ দিবে
     alert("অ্যাড লোড হচ্ছে... স্ক্রিনে আসা অ্যাডে ক্লিক করুন এবং ৪০ সেকেন্ড অপেক্ষা করুন।");
     
     let timeLeft = 40; 
     let timer = setInterval(() => {
         btn.innerHTML = `অ্যাড চলছে... (${timeLeft}s)`;
         timeLeft--;
-
         if (timeLeft < 0) {
             clearInterval(timer);
             btn.innerHTML = "আয় করুন";
             btn.disabled = false;
-
-            // বোটের ডাটাবেসে টাকা পাঠাবে
             tg.sendData("add_money"); 
-
-            alert("অভিনন্দন! ৪০ সেকেন্ড পূর্ণ হয়েছে। ২০ পয়সা যোগ হয়েছে।");
+            alert("২০ পয়সা যোগ হয়েছে!");
             tg.close(); 
         }
     }, 1000);
 }
+
     
 ‎</script>
 ‎<script type='' src="https://pl29195607.profitablecpmratenetwork.com/1e/20/88/1e208832404b2196bf31079bff18420d.js"></script>
