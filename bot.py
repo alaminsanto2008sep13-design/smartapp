@@ -1,7 +1,9 @@
 import telebot
+import os  # এই লাইনটা যোগ কর
 from telebot import types
 
-TOKEN = "8553316751:AAFWXYS4iJwiDmD1mxZaurPFUt4pIwuuMg4"
+# কোটেশন মার্ক ছাড়া এভাবে লিখবি
+TOKEN = os.getenv('BOT_TOKEN')
 bot = telebot.TeleBot(TOKEN)
 
 MY_APP_URL = "https://alaminsanto2008sep13-design.github.io/smartapp/"
