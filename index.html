@@ -4,45 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartAdBD</title>
+    <!-- টেলিগ্রাম মেইন ইঞ্জিন -->
     <script src="https://telegram.org"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
         body { background-color: #0f172a; color: white; padding-bottom: 80px; }
-        .header { background: #1e293b; padding: 20px; text-align: center; border-radius: 0 0 20px 20px; }
+        .header { background: #1e293b; padding: 25px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
         .balance-box { background: rgba(56, 189, 248, 0.1); padding: 15px; border-radius: 15px; margin-top: 10px; border: 1px solid #334155; }
         .section { display: none; padding: 20px; }
         .section.active { display: block; }
         .card { background: #1e293b; padding: 20px; border-radius: 15px; border: 1px solid #334155; margin-bottom: 15px; }
         .btn-main { background: #38bdf8; color: #0f172a; border: none; padding: 15px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1e293b; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #334155; }
+        .btn-main:disabled { background: #64748b; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1e293b; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #334155; z-index: 1000; }
         .nav-item { color: #94a3b8; font-size: 12px; text-align: center; flex: 1; cursor: pointer; }
-        .nav-item.active { color: #38bdf8; }
+        .nav-item.active { color: #38bdf8; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="header">
     <div class="balance-box">
-        <p>ব্যালেন্স</p>
+        <p>আপনার ব্যালেন্স</p>
         <h2 id="user-balance">৳ 0.00</h2>
     </div>
 </div>
 
+<!-- সেকশনগুলো -->
 <div id="home" class="section active">
-    <div class="card"><h3>নোটিশ</h3><p>৪০ সেকেন্ড অ্যাড দেখে ২০ পয়সা ইনকাম করুন।</p></div>
+    <div class="card"><h3>নোটিশ 📢</h3><p>অ্যাড দেখে আয় করুন। ২০ টাকা হলেই উইথড্র।</p></div>
 </div>
 
 <div id="earn" class="section">
     <div class="card">
-        <h3>আয় করুন</h3>
-        <button id="ad-btn" class="btn-main" onclick="startTask()">অ্যাড দেখুন</button>
+        <h3>ভিডিও দেখে আয় 📺</h3>
+        <p style="margin-bottom:10px; color:#94a3b8;">৪০ সেকেন্ড অপেক্ষা করুন।</p>
+        <button id="ad-btn" class="btn-main" onclick="startTask()">আয় করুন</button>
     </div>
 </div>
 
 <div id="withdraw" class="section">
-    <div class="card"><h3>উইথড্র</h3><p>বিকাশ/নগদে টাকা নিন।</p></div>
+    <div class="card"><h3>উইথড্র 💸</h3><p>বিকাশ বা নগদে পেমেন্ট নিতে পারবেন।</p></div>
 </div>
 
+<!-- নিচের বাটন মেনু -->
 <div class="bottom-nav">
     <div class="nav-item active" onclick="showSection('home', this)">🏠<br>হোম</div>
     <div class="nav-item" onclick="showSection('earn', this)">💰<br>আয়</div>
@@ -53,6 +58,7 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
 
+    // বাটন কাজ করার ফাংশন
     function showSection(sectionId, element) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.getElementById(sectionId).classList.add('active');
@@ -60,25 +66,30 @@
         element.classList.add('active');
     }
 
+    // অ্যাড ও ইনকাম ফাংশন
     function startTask() {
         let btn = document.getElementById("ad-btn");
         btn.disabled = true;
+        alert("অ্যাড লোড হচ্ছে... স্ক্রিনে আসা পপ-আপ অ্যাডে ক্লিক করুন এবং ৪০ সেকেন্ড অপেক্ষা করুন।");
+        
         let timeLeft = 40;
         let timer = setInterval(() => {
-            btn.innerHTML = 'অপেক্ষা করুন (' + timeLeft + 's)';
+            btn.innerHTML = "অপেক্ষা করুন (" + timeLeft + "s)";
             timeLeft--;
             if (timeLeft < 0) {
                 clearInterval(timer);
-                btn.innerHTML = "অ্যাড দেখুন";
+                btn.innerHTML = "আয় করুন";
                 btn.disabled = false;
-                tg.sendData("add_money");
+                
+                tg.sendData("add_money"); // বোটকে ডাটা পাঠাবে
                 alert("২০ পয়সা যোগ হয়েছে!");
                 tg.close();
             }
         }, 1000);
     }
-    
-‎</script>
+</script>
+
+<!-- Adsterra Social Bar Ad Code -->
 ‎<script type= ' 'src="https://pl29195607.profitablecpmratenetwork.com/1e/20/88/1e208832404b2196bf31079bff18420d.js"></script>
 ‎</body>
 ‎</html>
