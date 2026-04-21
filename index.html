@@ -6,110 +6,108 @@
     <title>SmartAdBD</title>
     <script src="https://telegram.org"></script>
     <style>
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
-            background: #0f172a; color: white; font-family: sans-serif; 
-            margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+            background: #0f172a; color: white; font-family: 'Segoe UI', Tahoma, sans-serif; 
+            margin: 0; padding: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column;
         }
-        /* ১. টপ প্রোফাইল - তোর চাওয়া অনুযায়ী প্রোফাইল পিক উপরে মাঝখানে */
-        .profile-header { padding: 10px 0; text-align: center; background: #1e293b; border-bottom: 1px solid #3b82f6; }
-        .pic-circle { 
-            width: 60px; height: 60px; border-radius: 50%; border: 2px solid #3b82f6; 
-            margin: 0 auto 5px; background: #334155; overflow: hidden;
+
+        /* ১. প্রোফাইল সেকশন - তোর সেই ইউনিক গোল ডিজাইন */
+        .profile-area { padding-top: 15px; text-align: center; background: #1e293b; padding-bottom: 10px; border-bottom: 1px solid #3b82f6; }
+        .u-pic { 
+            width: 65px; height: 65px; border-radius: 50%; border: 2.5px solid #3b82f6; 
+            margin: 0 auto 8px; object-fit: cover; background: #334155; display: block;
         }
-        .pic-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .user-name { font-size: 15px; font-weight: bold; margin-bottom: 2px; }
-        .uid-pill { 
-            background: #3b82f6; padding: 2px 12px; border-radius: 15px; 
-            font-size: 10px; font-weight: bold; display: inline-block;
-        }
+        .u-name { font-size: 16px; font-weight: bold; margin-bottom: 4px; display: block; }
+        .u-id { background: #3b82f6; color: white; padding: 2px 12px; border-radius: 12px; font-size: 10px; font-weight: bold; display: inline-block; }
 
         /* ২. নোটিশ বোর্ড */
-        .notice { 
-            background: rgba(239, 68, 68, 0.15); border-left: 3px solid #ef4444; 
-            margin: 10px; padding: 8px; font-size: 11px; text-align: left;
+        .notice-board { 
+            background: rgba(239, 68, 68, 0.15); border-left: 4px solid #ef4444; 
+            margin: 12px 15px; padding: 10px; font-size: 11.5px; text-align: left; border-radius: 4px;
         }
 
-        /* ৩. ব্যালেন্স */
-        .balance-box { text-align: center; margin: 5px 0; }
-        .bal-val { font-size: 30px; color: #10b981; font-weight: bold; }
+        /* ৩. কারেন্ট ব্যালেন্স */
+        .bal-container { text-align: center; margin-bottom: 10px; }
+        .bal-title { font-size: 12px; color: #94a3b8; }
+        .bal-num { font-size: 32px; color: #10b981; font-weight: bold; margin-top: 2px; }
 
-        /* ৪. বাটন গ্রিড - সাইজ ছোট করা হয়েছে যাতে স্ক্রিনে আটে */
-        .button-grid { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
+        /* ৪. বাটন গ্রিড - সাইজ একদম লক করা */
+        .btn-grid { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; 
             padding: 0 15px; margin-top: 5px;
         }
-        .app-btn { 
-            background: #ffffff; color: #0f172a; height: 75px; /* হাইট কমানো হয়েছে */
-            border-radius: 10px; font-weight: bold; font-size: 12px; 
+        .custom-btn { 
+            background: #ffffff; color: #0f172a; height: 65px; /* ফিক্সড ছোট সাইজ */
+            border-radius: 12px; font-weight: bold; font-size: 12.5px; 
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px #cbd5e1; cursor: pointer; text-align: center;
+            box-shadow: 0 4.5px 0 #cbd5e1; cursor: pointer; text-align: center;
         }
-        .app-btn:active { transform: translateY(2px); box-shadow: 0 1px #cbd5e1; }
+        .custom-btn:active { transform: translateY(2.5px); box-shadow: 0 1px 0 #cbd5e1; }
 
-        /* ৫. বটম নেভিগেশন - একদম নিচে ফিক্সড */
-        .bottom-nav { 
+        /* ৫. বটম নেভিগেশন - স্টিকি ও ফিক্সড */
+        .footer-nav { 
             margin-top: auto; background: #ffffff; display: flex; 
-            justify-content: space-around; padding: 10px 0; border-top: 1px solid #ddd;
+            justify-content: space-around; padding: 12px 0; border-top: 1px solid #e2e8f0;
         }
-        .nav-link { color: #64748b; font-size: 11px; font-weight: 600; flex: 1; text-align: center; text-decoration: none; }
+        .nav-link { color: #64748b; font-size: 11.5px; font-weight: 600; flex: 1; text-align: center; text-decoration: none; }
         .nav-link.active { color: #3b82f6; }
     </style>
 </head>
 <body>
 
-    <div class="profile-header">
-        <div class="pic-circle">
-            <img id="user_img" src="https://ui-avatars.com">
-        </div>
-        <div id="user_display_name" class="user-name">User Name</div>
-        <div class="uid-pill">UID: <span id="user_display_id">000000000</span></div>
+    <div class="profile-area">
+        <img id="p_img" class="u-pic" src="https://ui-avatars.com">
+        <span id="p_name" class="u-name">Loading User...</span>
+        <div class="u-id">UID: <span id="p_id">000000000</span></div>
     </div>
 
-    <div class="notice">
-        📢 <b>নোটিশ:</b> ২টি ভিডিও অ্যাড অবশ্যই সম্পূর্ণ দেখুন। আপনার রেফার করা মেম্বার ১০টি অ্যাড দেখলে বোনাস পাবেন। মিনিমাম উইথড্র ২০ টাকা।
+    <div class="notice-board">
+        📢 <b>নিরাপদ নোটিশ:</b> ২টি ভিডিও অ্যাড অবশ্যই সম্পূর্ণ দেখুন। আপনার রেফার করা মেম্বার ১০টি অ্যাড দেখলে তবেই বোনাস পাবেন। মিনিমাম উইথড্র ২০ টাকা।
     </div>
 
-    <div class="balance-box">
-        <div style="font-size: 11px; color: #94a3b8;">Current Balance</div>
-        <div class="bal-val">৳ <span id="main_bal">0.00</span></div>
+    <div class="bal-container">
+        <div class="bal-title">Current Balance</div>
+        <div class="bal-num">৳ <span id="main_balance">0.00</span></div>
     </div>
 
-    <div class="button-grid">
-        <div class="app-btn" onclick="startAdTask()">WATCH ADS</div>
-        <div class="app-btn" onclick="alert('VIP 1-20 Locked')">VIP REWARDS</div>
-        <div class="app-btn" onclick="alert('Income History')">TOTAL INCOME</div>
-        <div class="app-btn" onclick="alert('Withdraw System')">WITHDRAW</div>
+    <div class="btn-grid">
+        <div class="custom-btn" onclick="runAds()">WATCH ADS</div>
+        <div class="custom-btn" onclick="alert('VIP 1-20 Locked')">VIP REWARDS</div>
+        <div class="custom-btn" onclick="alert('Income History')">TOTAL INCOME</div>
+        <div class="custom-btn" onclick="alert('Withdraw System')">WITHDRAW</div>
     </div>
 
-    <div class="bottom-nav">
-        <a href="#" class="nav-link active">Home</a>
-        <a href="#" class="nav-item nav-link">Earn</a>
-        <a href="#" class="nav-item nav-link">Tasks</a>
-        <a href="#" class="nav-item nav-link">Refer</a>
-        <a href="#" class="nav-item nav-link">Profile</a>
+    <div class="footer-nav">
+        <div class="nav-link active">Home</div>
+        <div class="nav-link">Earn</div>
+        <div class="nav-link">Tasks</div>
+        <div class="nav-link">Refer</div>
+        <div class="nav-link">Profile</div>
     </div>
 
     <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand();
+        let webapp = window.Telegram.WebApp;
+        webapp.expand();
+        webapp.ready();
 
-        // ডাটা লোড করার সঠিক পদ্ধতি
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            let u = tg.initDataUnsafe.user;
-            document.getElementById('user_display_name').innerText = u.first_name;
-            document.getElementById('user_display_id').innerText = u.id;
-            if (u.photo_url) document.getElementById('user_img').src = u.photo_url;
+        // ইউজার ডাটা ফিক্স
+        let userData = webapp.initDataUnsafe.user;
+        if (userData) {
+            document.getElementById('p_name').innerText = userData.first_name + (userData.last_name ? " " + userData.last_name : "");
+            document.getElementById('p_id').innerText = userData.id;
+            if (userData.photo_url) document.getElementById('p_img').src = userData.photo_url;
         }
 
-        function startAdTask() {
-            alert("১ম অ্যাড (২৫ সে.)...");
+        function runAds() {
+            alert("১ম অ্যাড লোড হচ্ছে (২৫ সেকেন্ড)...");
             setTimeout(() => {
-                alert("২য় অ্যাড (২৫ সে.)...");
+                alert("২য় অ্যাড লোড হচ্ছে (২৫ সেকেন্ড)...");
                 setTimeout(() => {
-                    let b = document.getElementById('main_bal');
-                    b.innerText = (parseFloat(b.innerText) + 0.15).toFixed(2);
-                    alert("১৫ পয়সা যোগ হয়েছে!");
+                    let b = document.getElementById('main_balance');
+                    let current = parseFloat(b.innerText);
+                    b.innerText = (current + 0.15).toFixed(2);
+                    alert("অভিনন্দন! ১৫ পয়সা যোগ হয়েছে।");
                 }, 25000);
             }, 25000);
         }
