@@ -6,107 +6,118 @@
     <title>SmartAdBD</title>
     <script src="https://telegram.org"></script>
     <style>
-        * { box-sizing: border-box; }
-        body { background: #0f172a; color: white; font-family: sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        .page { display: none; padding: 20px; flex-grow: 1; overflow-y: auto; text-align: center; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background: #0f172a; color: white; font-family: 'Arial', sans-serif; 
+            margin: 0; padding: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column;
+        }
+
+        .page { display: none; padding: 15px; flex-grow: 1; overflow-y: auto; text-align: center; }
         .active-page { display: block; }
 
-        /* হোম - শুধু নোটিশ */
-        .notice-card { background: rgba(239, 68, 68, 0.15); border-left: 4px solid #ef4444; padding: 15px; text-align: left; margin-top: 30px; border-radius: 8px; font-size: 14px; }
+        /* তোর সেই ৩ডি হোয়াইট বাটন ডিজাইন */
+        .pill-btn { 
+            background: #ffffff; color: #000; width: 100%; padding: 18px; 
+            border-radius: 40px; font-weight: bold; font-size: 16px; 
+            box-shadow: 0 6px 0 #b1b1b1; cursor: pointer; border: none;
+            margin-bottom: 15px; display: block; text-align: center;
+        }
+        .pill-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #b1b1b1; }
+        
+        /* ছোট ৩ডি বাটন গ্রিড (প্রোফাইলের জন্য) */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .small-pill { padding: 15px 5px; font-size: 13px; }
 
-        /* ৩ডি বাটন স্টাইল */
-        .custom-btn { background: #fff; color: #0f172a; padding: 18px; border-radius: 12px; font-weight: bold; box-shadow: 0 5px #cbd5e1; cursor: pointer; margin-bottom: 15px; width: 100%; display: block; text-decoration: none; }
-        .custom-btn:active { transform: translateY(3px); box-shadow: 0 2px #cbd5e1; }
+        /* হোম - নোটিশ */
+        .notice-box { background: rgba(239, 68, 68, 0.1); border-left: 5px solid #ef4444; padding: 15px; text-align: left; border-radius: 10px; margin-top: 20px; }
 
-        /* প্রোফাইল ডিজাইন */
-        .p-pic { width: 85px; height: 85px; border-radius: 50%; border: 3px solid #3b82f6; margin: 0 auto 10px; }
-        .bal-txt { font-size: 32px; color: #10b981; font-weight: bold; margin: 10px 0; }
-        .uid-tag { background: #3b82f6; padding: 3px 15px; border-radius: 15px; font-size: 11px; display: inline-block; margin-bottom: 20px; }
+        /* প্রোফাইল এলিমেন্টস */
+        .p-circle { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #3b82f6; margin: 0 auto 10px; background: #eee; }
+        .p-name { font-size: 18px; font-weight: bold; margin-bottom: 15px; }
 
-        /* নেভিগেশন বার */
-        .footer { background: #fff; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -5px 10px rgba(0,0,0,0.2); }
-        .nav-btn { color: #64748b; font-size: 11px; font-weight: bold; flex: 1; text-align: center; cursor: pointer; }
+        /* বটম নেভিগেশন (তোর ইমেজের মতো আইকনসহ) */
+        .navbar { background: #ffffff; display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid #ddd; }
+        .nav-item { color: #000; font-size: 11px; font-weight: bold; flex: 1; text-align: center; cursor: pointer; }
         .nav-active { color: #3b82f6; }
+        .nav-icon { display: block; font-size: 20px; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
     <!-- ১. হোম পেজ (শুধু নোটিশ) -->
     <div id="home" class="page active-page">
-        <h2 style="color: #3b82f6; margin-top: 10px;">Notice Board</h2>
-        <div class="notice-card">
-            📢 <b>গুরুত্বপূর্ণ নোটিশ:</b> <br><br>
-            - ২টি ভিডিও অ্যাড অবশ্যই সম্পূর্ণ দেখুন। <br>
-            - রেফার বোনাস পেতে মেম্বারকে অন্তত ১০টি অ্যাড দেখতে হবে। <br>
+        <h2 style="color: #3b82f6;">Home Notice</h2>
+        <div class="notice-box">
+            📢 <b>জরুরি নিয়ম:</b> <br><br>
+            - ২টি ভিডিও অ্যাড ২৫+২৫ সে. অবশ্যই দেখুন। <br>
+            - ১০টি অ্যাড দেখলে আপনার রেফারেল এক্টিভ হবে। <br>
             - মিনিমাম উইথড্র ২০ টাকা।
         </div>
     </div>
 
-    <!-- ২. টাস্ক পেজ (শুধু ওয়াচ অ্যাড) -->
-    <div id="tasks" class="page">
-        <h2 style="color: #3b82f6;">Tasks</h2>
-        <div class="custom-btn" style="margin-top: 50px;" onclick="runAds()">WATCH ADS (2 Videos)</div>
+    <!-- ২. আর্ন/টাস্ক পেজ -->
+    <div id="earn" class="page">
+        <h2 style="color: #3b82f6;">Earn Money</h2>
+        <button class="pill-btn" onclick="startAds()">WATCH ADS (2 Videos)</button>
+        <p style="font-size: 12px; color: #94a3b8;">প্রতি ২টি অ্যাডে ১৫ পয়সা পাবেন।</p>
     </div>
 
-    <!-- ৩. প্রোফাইল পেজ (সব ডিটেইলস ও রিওয়ার্ডস) -->
+    <!-- ৩. প্রোফাইল পেজ (তোর ইমেজের মতো বাটন গ্রিড) -->
     <div id="profile" class="page">
-        <h2 style="color: #3b82f6;">My Profile</h2>
-        <img id="u_img" class="p-pic" src="https://ui-avatars.com">
-        <div id="u_name" style="font-weight: bold; font-size: 18px;">User Name</div>
-        <div class="uid-tag">UID: <span id="u_id">000000000</span></div>
-        <div style="font-size: 14px; color: #94a3b8;">Current Balance</div>
-        <div class="bal-txt">৳ <span id="balance">0.00</span></div>
+        <div class="p-circle"></div>
+        <div id="u_name" class="p-name">Loading...</div>
         
-        <div style="margin-top: 20px;">
-            <div class="custom-btn" onclick="alert('Total Income List Loading...')">TOTAL INCOME</div>
-            <div class="custom-btn" onclick="alert('VIP Rewards (Level 1-20)')">VIP REWARDS</div>
+        <button class="pill-btn">Balance: <span id="balance">0.00</span> taka</button>
+        
+        <div class="grid-2">
+            <button class="pill-btn small-pill">Edit Profile</button>
+            <button class="pill-btn small-pill">Bonus Reward</button>
+            <button class="pill-btn small-pill">Referral History</button>
+            <button class="pill-btn small-pill">Withdrawal</button>
+            <button class="pill-btn small-pill">VIP Rewards</button>
+            <button class="pill-btn small-pill">Total Income</button>
         </div>
+        
+        <button class="pill-btn small-pill" style="width: 60%; margin: 10px auto;">Customer Support</button>
     </div>
 
-    <!-- ৪. উইথড্র পেজ -->
-    <div id="withdraw" class="page">
-        <h2 style="color: #3b82f6;">Withdraw</h2>
-        <div class="custom-btn" onclick="alert('বিকাশ/নগদ নম্বর দিন')">WITHDRAW (Bikash/Nogod)</div>
-        <div style="text-align: left; background: #1e293b; padding: 15px; border-radius: 8px; margin-top: 20px;">
-            <h4 style="margin-top: 0;">Referral History:</h4>
-            <p id="ref_list" style="font-size: 12px; color: #94a3b8;">আপনার রেফার করা মেম্বারদের লিস্ট এখানে দেখাবে।</p>
-        </div>
+    <!-- ৪. রেফার পেজ -->
+    <div id="refer" class="page">
+        <h2 style="color: #3b82f6;">Refer & Earn</h2>
+        <button class="pill-btn">Invite 5 Friends -> Get ৳2</button>
+        <button class="pill-btn">Invite 10 Friends -> Get ৳4</button>
     </div>
 
-    <!-- বটম মেনু -->
-    <div class="footer">
-        <div class="nav-btn nav-active" onclick="showPage('home', this)">Home</div>
-        <div class="nav-btn" onclick="showPage('tasks', this)">Tasks</div>
-        <div class="nav-btn" onclick="showPage('profile', this)">Profile</div>
-        <div class="nav-btn" onclick="showPage('withdraw', this)">Withdraw</div>
+    <!-- বটম মেনু (আইকনসহ) -->
+    <div class="navbar">
+        <div class="nav-item nav-active" onclick="showP('home', this)"><span class="nav-icon">🏠</span>Home</div>
+        <div class="nav-item" onclick="showP('earn', this)"><span class="nav-icon">💰</span>Earn</div>
+        <div class="nav-item" onclick="showP('profile', this)"><span class="nav-icon">👤</span>Profile</div>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        function showPage(pageId, btn) {
+        function showP(id, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.getElementById(pageId).classList.add('active-page');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
-            btn.classList.add('nav-active');
+            document.getElementById(id).classList.add('active-page');
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('nav-active'));
+            el.classList.add('nav-active');
         }
 
         if (tg.initDataUnsafe.user) {
-            let u = tg.initDataUnsafe.user;
-            document.getElementById('u_name').innerText = u.first_name + (u.last_name ? " " + u.last_name : "");
-            document.getElementById('u_id').innerText = u.id;
-            if (u.photo_url) document.getElementById('u_img').src = u.photo_url;
+            document.getElementById('u_name').innerText = tg.initDataUnsafe.user.first_name;
         }
 
-        function runAds() {
-            alert("১ম অ্যাড শুরু... (২৫ সেকেন্ড)");
+        function startAds() {
+            alert("১ম অ্যাড (২৫ সে.) শুরু...");
             setTimeout(() => {
-                alert("২য় অ্যাড শুরু... (২৫ সেকেন্ড)");
+                alert("২য় অ্যাড (২৫ সে.) শুরু...");
                 setTimeout(() => {
-                    let b = document.getElementById('balance');
-                    b.innerText = (parseFloat(b.innerText) + 0.15).toFixed(2);
-                    alert("অভিনন্দন! ১৫ পয়সা যোগ হয়েছে।");
+                    let bal = document.getElementById('balance');
+                    bal.innerText = (parseFloat(bal.innerText) + 0.15).toFixed(2);
+                    alert("১৫ পয়সা যোগ হয়েছে!");
                 }, 25000);
             }, 25000);
         }
