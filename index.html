@@ -8,106 +8,119 @@
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: #0f172a; color: white; font-family: sans-serif; margin: 0; padding: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        
         .page { display: none; padding: 15px; flex-grow: 1; overflow-y: auto; text-align: center; padding-bottom: 80px; }
         .active-page { display: block; }
 
-        /* মিশন ও VIP কার্ড ডিজাইন */
+        /* কার্ড ডিজাইন */
         .card { background: #1e293b; border: 1px solid #334155; padding: 15px; border-radius: 12px; margin-bottom: 12px; text-align: left; }
-        .progress-text { float: right; color: #3b82f6; font-weight: bold; }
-        .claim-btn { background: #ffffff; color: #000; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 10px; border: none; cursor: not-allowed; opacity: 0.5; }
-        .btn-active { cursor: pointer; opacity: 1; background: #10b981; color: white; box-shadow: 0 4px #065f46; }
+        .prog { float: right; color: #3b82f6; font-weight: bold; font-size: 14px; }
+        .claim-btn { background: #4b5563; color: #94a3b8; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 10px; border: none; cursor: not-allowed; }
 
-        /* ৩ডি হোয়াইট বাটন গ্রিড (প্রোফাইলের জন্য) */
-        .pill-btn { background: #fff; color: #000; width: 100%; padding: 15px; border-radius: 40px; font-weight: bold; font-size: 15px; box-shadow: 0 5px 0 #b1b1b1; margin-bottom: 15px; border: none; cursor: pointer; display: block; text-decoration: none; }
+        /* ৩ডি হোয়াইট বাটন */
+        .pill-btn { background: #fff; color: #000; width: 100%; padding: 15px; border-radius: 40px; font-weight: bold; box-shadow: 0 5px 0 #b1b1b1; margin-bottom: 15px; border: none; cursor: pointer; display: block; text-align: center; }
         .pill-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #b1b1b1; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .small-pill { padding: 12px 5px; font-size: 12px; border-radius: 30px; }
 
-        /* নেভিগেশন বার - ৫ বাটন */
-        .footer-nav { background: #fff; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #ddd; position: fixed; bottom: 0; width: 100%; z-index: 1000; }
+        /* নেভিগেশন */
+        .footer-nav { background: #ffffff; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #ddd; position: fixed; bottom: 0; width: 100%; z-index: 1000; }
         .nav-item { color: #000; font-size: 10px; font-weight: bold; flex: 1; text-align: center; cursor: pointer; }
         .nav-active { color: #3b82f6; }
-
-        /* পেমেন্ট সেকশন */
         input { width: 100%; padding: 12px; border-radius: 10px; border: none; margin: 10px 0; background: #334155; color: white; }
     </style>
 </head>
 <body>
 
-    <!-- ১. Home: নোটিশ -->
+    <!-- ১. Home -->
     <div id="home" class="page">
         <h2 style="color: #3b82f6;">Home Notice</h2>
-        <div class="card" style="border-left: 5px solid #ef4444; background: rgba(239, 68, 68, 0.1);">
-            📢 <b>নোটিশ:</b> ১০টি অ্যাড রেফার রুল মেনে কাজ করুন। ২টি অ্যাড সম্পূর্ণ দেখুন। প্রতিদিন টাস্ক রিফ্রেশ হবে।
-        </div>
+        <div class="card" style="border-left: 5px solid #ef4444;">📢 <b>নোটিশ:</b> ১০টি অ্যাড রেফার রুল মেনে কাজ করুন। ২টি অ্যাড সম্পূর্ণ দেখুন।</div>
     </div>
 
-    <!-- ২. Earn: অ্যাড টাস্ক -->
+    <!-- ২. Earn -->
     <div id="earn" class="page">
-        <h2 style="color: #3b82f6;">Earn Money</h2>
+        <h2 style="color: #3b82f6;">Watch Ads</h2>
         <button class="pill-btn" onclick="startAds()">WATCH ADS (2 Videos)</button>
         <p>ব্যালেন্স: ৳<span class="u_bal">0.00</span></p>
     </div>
 
-    <!-- ৩. Tasks: ডেইলি মিশন (প্রগ্রেসসহ) -->
+    <!-- ৩. Tasks (ডেইলি মাইলস্টোন) -->
     <div id="tasks" class="page">
         <h2 style="color: #3b82f6;">Daily Mission System</h2>
-        <div id="mission-list">
-            <!-- মিশনে ১-১০ পর্যন্ত প্রগ্রেসসহ এখানে লোড হবে -->
-            <div class="card">1. Invite 5 Friends <span class="progress-text">0/5</span><button class="claim-btn">Claim ৳2</button></div>
-            <div class="card">6. Watch 5 Ads <span class="progress-text">0/5</span><button class="claim-btn">Claim ৳0.25</button></div>
-            <!-- বাকিগুলো লজিক অনুযায়ী আসবে -->
-        </div>
+        <div class="card">1. Invite 5 Friends <span class="prog">0/5</span><button class="claim-btn">Claim ৳2</button></div>
+        <div class="card">2. Invite 10 Friends <span class="prog">0/10</span><button class="claim-btn">Claim ৳4</button></div>
+        <div class="card">3. Invite 20 Friends <span class="prog">0/20</span><button class="claim-btn">Claim ৳6</button></div>
+        <div class="card">4. Invite 50 Friends <span class="prog">0/50</span><button class="claim-btn">Claim ৳10</button></div>
+        <div class="card">5. Invite 100 Friends <span class="prog">0/100</span><button class="claim-btn">Claim ৳18</button></div>
+        <div class="card">6. Watch 5 Ads <span class="prog">0/5</span><button class="claim-btn">Claim ৳0.25</button></div>
+        <div class="card">7. Watch 10 Ads <span class="prog">0/10</span><button class="claim-btn">Claim ৳0.50</button></div>
+        <div class="card">8. Watch 25 Ads <span class="prog">0/25</span><button class="claim-btn">Claim ৳1.25</button></div>
+        <div class="card">9. Watch 50 Ads <span class="prog">0/50</span><button class="claim-btn">Claim ৳3</button></div>
+        <div class="card">10. Watch 100 Ads <span class="prog">0/100</span><button class="claim-btn">Claim ৳5</button></div>
     </div>
 
-    <!-- ৪. Refer: ইনভাইট লিংক -->
+    <!-- ৪. Refer -->
     <div id="refer" class="page">
-        <h2 style="color: #3b82f6;">Refer & Earn</h2>
-        <div class="card">প্রতি সফল রেফারে বোনাস পেতে বন্ধুকে ১০টি অ্যাড দেখতে হবে।</div>
-        <button class="pill-btn" onclick="copyRefer()">Copy My Refer Link</button>
+        <h2 style="color: #3b82f6;">Referral Link</h2>
+        <button class="pill-btn">Copy Refer Link</button>
     </div>
 
-    <!-- ৫. Profile: মেইন ড্যাশবোর্ড ও VIP -->
+    <!-- ৫. Profile -->
     <div id="profile" class="page active-page">
-        <img id="u_pic" style="width: 75px; height: 75px; border-radius: 50%; border: 2px solid #3b82f6;" src="https://ui-avatars.com">
-        <h3 id="u_name" style="margin: 5px 0;">User</h3>
+        <img id="u_pic" style="width: 70px; border-radius: 50%;" src="https://ui-avatars.com">
+        <h3 id="u_name">User</h3>
         <button class="pill-btn">৳ <span class="u_bal">0.00</span> Balance</button>
-        
-        <h3 style="color: #facc15; margin-top: 20px;">VIP & Settings</h3>
         <div class="grid-2">
             <button class="small-pill pill-btn" onclick="showP('vip', this)">VIP Rewards</button>
             <button class="small-pill pill-btn" onclick="showP('history', this)">Total Income</button>
             <button class="small-pill pill-btn" onclick="showP('withdraw', this)">Withdrawal</button>
-            <button class="small-pill pill-btn" onclick="alert('Bonus Rewards')">Bonus Reward</button>
-            <button class="small-pill pill-btn" onclick="alert('Refer History')">Refer History</button>
-            <button class="small-pill pill-btn" onclick="alert('Edit Profile')">Edit Profile</button>
+            <button class="small-pill pill-btn">Bonus Reward</button>
+            <button class="small-pill pill-btn">Refer History</button>
+            <button class="small-pill pill-btn">Edit Profile</button>
         </div>
-        <button class="pill-btn small-pill" style="width: 65%; margin: 15px auto;">Customer Support</button>
     </div>
 
-    <!-- ৬. সাব-পেজ: VIP Rewards (২০ লেভেল) -->
+    <!-- ৬. VIP Rewards (Full 20 Level List - একদম তোর চাওয়া অনুযায়ী) -->
     <div id="vip" class="page">
         <h2 style="color: #facc15;">VIP Rewards (Level 1-20)</h2>
-        <div id="vip-list"></div>
+        <div class="card">👑 <b>Level 1:</b> 250 Ads + 5 Refers <span class="prog">0/250</span><button class="claim-btn">Claim ৳5</button></div>
+        <div class="card">👑 <b>Level 2:</b> 500 Ads + 10 Refers <span class="prog">0/500</span><button class="claim-btn">Claim ৳10</button></div>
+        <div class="card">👑 <b>Level 3:</b> 750 Ads + 15 Refers <span class="prog">0/750</span><button class="claim-btn">Claim ৳15</button></div>
+        <div class="card">👑 <b>Level 4:</b> 1000 Ads + 20 Refers <span class="prog">0/1000</span><button class="claim-btn">Claim ৳20</button></div>
+        <div class="card">👑 <b>Level 5:</b> 1250 Ads + 25 Refers <span class="prog">0/1250</span><button class="claim-btn">Claim ৳25</button></div>
+        <div class="card">👑 <b>Level 6:</b> 1500 Ads + 30 Refers <span class="prog">0/1500</span><button class="claim-btn">Claim ৳30</button></div>
+        <div class="card">👑 <b>Level 7:</b> 1750 Ads + 35 Refers <span class="prog">0/1750</span><button class="claim-btn">Claim ৳35</button></div>
+        <div class="card">👑 <b>Level 8:</b> 2000 Ads + 40 Refers <span class="prog">0/2000</span><button class="claim-btn">Claim ৳40</button></div>
+        <div class="card">👑 <b>Level 9:</b> 2250 Ads + 45 Refers <span class="prog">0/2250</span><button class="claim-btn">Claim ৳45</button></div>
+        <div class="card">👑 <b>Level 10:</b> 2500 Ads + 50 Refers <span class="prog">0/2500</span><button class="claim-btn">Claim ৳50</button></div>
+        <div class="card">👑 <b>Level 11:</b> 2750 Ads + 55 Refers <span class="prog">0/2750</span><button class="claim-btn">Claim ৳55</button></div>
+        <div class="card">👑 <b>Level 12:</b> 3000 Ads + 60 Refers <span class="prog">0/3000</span><button class="claim-btn">Claim ৳60</button></div>
+        <div class="card">👑 <b>Level 13:</b> 3250 Ads + 65 Refers <span class="prog">0/3250</span><button class="claim-btn">Claim ৳65</button></div>
+        <div class="card">👑 <b>Level 14:</b> 3500 Ads + 70 Refers <span class="prog">0/3500</span><button class="claim-btn">Claim ৳70</button></div>
+        <div class="card">👑 <b>Level 15:</b> 3750 Ads + 75 Refers <span class="prog">0/3750</span><button class="claim-btn">Claim ৳75</button></div>
+        <div class="card">👑 <b>Level 16:</b> 4000 Ads + 80 Refers <span class="prog">0/4000</span><button class="claim-btn">Claim ৳80</button></div>
+        <div class="card">👑 <b>Level 17:</b> 4250 Ads + 85 Refers <span class="prog">0/4250</span><button class="claim-btn">Claim ৳85</button></div>
+        <div class="card">👑 <b>Level 18:</b> 4500 Ads + 90 Refers <span class="prog">0/4500</span><button class="claim-btn">Claim ৳90</button></div>
+        <div class="card">👑 <b>Level 19:</b> 4750 Ads + 95 Refers <span class="prog">0/4750</span><button class="claim-btn">Claim ৳95</button></div>
+        <div class="card">👑 <b>Level 20:</b> 5000 Ads + 100 Refers <span class="prog">0/5000</span><button class="claim-btn">Claim ৳100</button></div>
     </div>
 
-    <!-- ৭. সাব-পেজ: Withdraw -->
+    <!-- ৭. Withdraw -->
     <div id="withdraw" class="page">
-        <h2 style="color: #3b82f6;">Withdraw Funds</h2>
-        <div class="card">মিনিমাম উইথড্র: ২০ টাকা</div>
-        <input type="number" placeholder="টাকার পরিমাণ লিখুন">
-        <input type="text" placeholder="বিকাশ/নগদ নম্বর">
-        <button class="pill-btn" style="background: #10b981; color: white; box-shadow: 0 5px 0 #065f46;">SUBMIT REQUEST</button>
+        <h2 style="color: #3b82f6;">Withdraw</h2>
+        <div class="card">বিকাশ/নগদ মিনিমাম ২০ টাকা।</div>
+        <input type="number" placeholder="৳ Amount">
+        <input type="text" placeholder="Number">
+        <button class="pill-btn" style="background:#10b981; color:white;">SUBMIT</button>
     </div>
 
-    <!-- ৮. সাব-পেজ: History -->
+    <!-- ৮. History -->
     <div id="history" class="page">
         <h2 style="color: #3b82f6;">Income History</h2>
-        <div class="card" id="history-data">এখন পর্যন্ত কোনো ইনকাম নেই।</div>
+        <div class="card">কোনো রেকর্ড নেই।</div>
     </div>
 
-    <!-- ৫টি বাটন মেনু বার -->
+    <!-- মেনু বার -->
     <div class="footer-nav">
         <div class="nav-item" onclick="showP('home', this)">🏠<br>Home</div>
         <div class="nav-item" onclick="showP('earn', this)">💰<br>Earn</div>
@@ -117,35 +130,22 @@
     </div>
 
     <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand();
-
+        let tg = window.Telegram.WebApp; tg.expand();
         function showP(id, btn) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(id).classList.add('active-page');
             document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('nav-active'));
             if(btn.classList.contains('nav-item')) btn.classList.add('nav-active');
         }
-
-        // VIP ২০ লেভেল লোড
-        const vipDiv = document.getElementById('vip-list');
-        for(let i=1; i<=20; i++){
-            vipDiv.innerHTML += `<div class="card"><b style="color:#facc15">Level ${i}</b> <span class="progress-text">0/${i*250}</span><p style="font-size:11px">Target: ${i*250} Ads + ${i*5} Refers</p><button class="claim-btn">Claim ৳${i*5}</button></div>`;
-        }
-
         function startAds() {
-            alert("অ্যাড ১ শুরু... (২৫ সে.)");
+            alert("অ্যাড শুরু...");
             setTimeout(() => {
-                alert("অ্যাড ২ শুরু... (২৫ সে.)");
-                setTimeout(() => {
-                    document.querySelectorAll('.u_bal').forEach(el => {
-                        el.innerText = (parseFloat(el.innerText) + 0.15).toFixed(2);
-                    });
-                    alert("১৫ পয়সা যোগ হয়েছে!");
-                }, 25000);
-            }, 25000);
+                document.querySelectorAll('.u_bal').forEach(el => {
+                    el.innerText = (parseFloat(el.innerText) + 0.15).toFixed(2);
+                });
+                alert("১৫ পয়সা যোগ হয়েছে!");
+            }, 5000);
         }
-
         if (tg.initDataUnsafe.user) {
             document.getElementById('u_name').innerText = tg.initDataUnsafe.user.first_name;
             if(tg.initDataUnsafe.user.photo_url) document.getElementById('u_pic').src = tg.initDataUnsafe.user.photo_url;
