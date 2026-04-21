@@ -3,92 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartAdBD</title>
-    <!-- টেলিগ্রাম মেইন ইঞ্জিন -->
+    <title>SmartAdBD App</title>
+    <!-- টেলিগ্রাম ওয়েব অ্যাপ স্ক্রিপ্ট -->
     <script src="https://telegram.org"></script>
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
-        body { background-color: #0f172a; color: white; padding-bottom: 80px; }
-        .header { background: #1e293b; padding: 25px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
-        .balance-box { background: rgba(56, 189, 248, 0.1); padding: 15px; border-radius: 15px; margin-top: 10px; border: 1px solid #334155; }
-        .section { display: none; padding: 20px; }
-        .section.active { display: block; }
-        .card { background: #1e293b; padding: 20px; border-radius: 15px; border: 1px solid #334155; margin-bottom: 15px; }
-        .btn-main { background: #38bdf8; color: #0f172a; border: none; padding: 15px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; }
-        .btn-main:disabled { background: #64748b; }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1e293b; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #334155; z-index: 1000; }
-        .nav-item { color: #94a3b8; font-size: 12px; text-align: center; flex: 1; cursor: pointer; }
-        .nav-item.active { color: #38bdf8; font-weight: bold; }
+        body { 
+            background: #0f172a; 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            text-align: center; 
+            user-select: none;
+        }
+        /* টপ প্রোফাইল সেকশন */
+        .header { 
+            padding: 25px; 
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); 
+            border-bottom: 2px solid #3b82f6; 
+        }
+        .profile-pic { 
+            width: 90px; 
+            height: 90px; 
+            border-radius: 50%; 
+            border: 3px solid #3b82f6; 
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            margin-bottom: 10px;
+        }
+        .uid-tag { 
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8); 
+            padding: 4px 15px; 
+            border-radius: 20px; 
+            font-size: 12px; 
+            font-weight: bold;
+            display: inline-block;
+        }
+        /* নোটিশ বোর্ড */
+        .notice { 
+            background: rgba(239, 68, 68, 0.1); 
+            border-left: 5px solid #ef4444; 
+            margin: 15px; 
+            padding: 12px; 
+            font-size: 13px; 
+            text-align: left;
+            border-radius: 5px;
+        }
+        /* ব্যালেন্স কার্ড */
+        .balance-card {
+            margin: 20px auto;
+            width: 85%;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        #bal { font-size: 28px; color: #10b981; font-weight: bold; }
+
+        /* ৩ডি বাটন গ্রিড */
+        .grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            padding: 15px; 
+            margin-bottom: 100px;
+        }
+        .btn { 
+            background: #ffffff; 
+            color: #0f172a; 
+            padding: 22px 10px; 
+            border-radius: 18px; 
+            font-weight: bold; 
+            font-size: 14px;
+            box-shadow: 0 6px 0 #cbd5e1; 
+            cursor: pointer; 
+            transition: 0.1s;
+        }
+        .btn:active { 
+            transform: translateY(4px); 
+            box-shadow: 0 2px 0 #cbd5e1; 
+        }
+
+        /* বটম নেভিগেশন */
+        .nav { 
+            position: fixed; 
+            bottom: 10px; 
+            width: 92%; 
+            left: 4%; 
+            background: #ffffff; 
+            display: flex; 
+            justify-content: space-around; 
+            padding: 12px 0; 
+            border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .nav-item { color: #64748b; font-size: 11px; font-weight: 600; cursor: pointer; }
+        .nav-item.active { color: #3b82f6; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <div class="balance-box">
-        <p>আপনার ব্যালেন্স</p>
-        <h2 id="user-balance">৳ 0.00</h2>
+    <div class="header">
+        <img id="u_pic" class="profile-pic" src="https://placeholder.com" alt="Profile">
+        <div id="u_name" style="font-size: 18px; font-weight: 600; margin-bottom: 5px;">User Name</div>
+        <div class="uid-tag">UID: <span id="u_id">000000000</span></div>
     </div>
-</div>
 
-<!-- সেকশনগুলো -->
-<div id="home" class="section active">
-    <div class="card"><h3>নোটিশ 📢</h3><p>অ্যাড দেখে আয় করুন। ২০ টাকা হলেই উইথড্র।</p></div>
-</div>
-
-<div id="earn" class="section">
-    <div class="card">
-        <h3>ভিডিও দেখে আয় 📺</h3>
-        <p style="margin-bottom:10px; color:#94a3b8;">৪০ সেকেন্ড অপেক্ষা করুন।</p>
-        <button id="ad-btn" class="btn-main" onclick="startTask()">আয় করুন</button>
+    <div class="notice">
+        📢 <b>নিরাপদ নোটিশ:</b> <br>
+        - ২টি ভিডিও অ্যাড (২৫+২৫ সে.) অবশ্যই সম্পূর্ণ দেখুন। <br>
+        - আপনার রেফার করা মেম্বার ১০টি অ্যাড দেখলে তবেই রেফার বোনাস পাবেন। <br>
+        - মিনিমাম উইথড্র ২০ টাকা (বিকাশ/নগদ)।
     </div>
-</div>
 
-<div id="withdraw" class="section">
-    <div class="card"><h3>উইথড্র 💸</h3><p>বিকাশ বা নগদে পেমেন্ট নিতে পারবেন।</p></div>
-</div>
+    <div class="balance-card">
+        <div style="font-size: 14px; color: #94a3b8;">Current Balance</div>
+        <div>৳ <span id="bal">0.00</span></div>
+    </div>
 
-<!-- নিচের বাটন মেনু -->
-<div class="bottom-nav">
-    <div class="nav-item active" onclick="showSection('home', this)">🏠<br>হোম</div>
-    <div class="nav-item" onclick="showSection('earn', this)">💰<br>আয়</div>
-    <div class="nav-item" onclick="showSection('withdraw', this)">💸<br>উইথড্র</div>
-</div>
+    <div class="grid">
+        <div class="btn" onclick="handleAds()">WATCH ADS</div>
+        <div class="btn" onclick="alert('VIP Levels (1-20) Coming Soon!')">VIP REWARDS</div>
+        <div class="btn" onclick="alert('Total Income History Page')">TOTAL INCOME</div>
+        <div class="btn" onclick="alert('Withdraw System (Bikash/Nogod)')">WITHDRAW</div>
+    </div>
 
-<script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
+    <div class="nav">
+        <div class="nav-item active">Home</div>
+        <div class="nav-item">Earn</div>
+        <div class="nav-item">Tasks</div>
+        <div class="nav-item">Refer</div>
+        <div class="nav-item">Profile</div>
+    </div>
 
-    // বাটন কাজ করার ফাংশন
-    function showSection(sectionId, element) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(sectionId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        element.classList.add('active');
-    }
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
 
-    // অ্যাড ও ইনকাম ফাংশন
-    function startTask() {
-        let btn = document.getElementById("ad-btn");
-        btn.disabled = true;
-        alert("অ্যাড লোড হচ্ছে... স্ক্রিনে আসা পপ-আপ অ্যাডে ক্লিক করুন এবং ৪০ সেকেন্ড অপেক্ষা করুন।");
-        
-        let timeLeft = 40;
-        let timer = setInterval(() => {
-            btn.innerHTML = "অপেক্ষা করুন (" + timeLeft + "s)";
-            timeLeft--;
-            if (timeLeft < 0) {
-                clearInterval(timer);
-                btn.innerHTML = "আয় করুন";
-                btn.disabled = false;
-                
-                tg.sendData("add_money"); // বোটকে ডাটা পাঠাবে
-                alert("২০ পয়সা যোগ হয়েছে!");
-                tg.close();
-            }
-        }, 1000);
-    }
-</script>
+        // ইউজার ডাটা সেট করা
+        document.getElementById('u_name').innerText = tg.initDataUnsafe.user.first_name;
+        document.getElementById('u_id').innerText = tg.initDataUnsafe.user.id;
+        if(tg.initDataUnsafe.user.photo_url) {
+            document.getElementById('u_pic').src = tg.initDataUnsafe.user.photo_url;
+        }
 
+        // অ্যাড দেখার লজিক (২৫+২৫ সেকেন্ড)
+        function handleAds() {
+            alert("অ্যাড ১ লোড হচ্ছে... (২৫ সেকেন্ড অপেক্ষা করুন)");
+            setTimeout(() => {
+                alert("অ্যাড ২ লোড হচ্ছে... (২৫ সেকেন্ড অপেক্ষা করুন)");
+                setTimeout(() => {
+                    let balanceElement = document.getElementById('bal');
+                    let currentBalance = parseFloat(balanceElement.innerText);
+                    balanceElement.innerText = (currentBalance + 0.15).toFixed(2);
+                    alert("অভিনন্দন! আপনি ১৫ পয়সা পেয়েছেন।");
+                }, 25000); // ২য় অ্যাড ২৫ সেকেন্ড
+            }, 25000); // ১ম অ্যাড ২৫ সেকেন্ড
+        }
+    </script>
 <!-- Adsterra Social Bar Ad Code -->
 ‎<script type= ' 'src="https://pl29195607.profitablecpmratenetwork.com/1e/20/88/1e208832404b2196bf31079bff18420d.js"></script>
 ‎</body>
