@@ -2,130 +2,69 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartAdBD App</title>
-    <!-- টেলিগ্রাম ওয়েব অ্যাপ স্ক্রিপ্ট -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SmartAdBD</title>
     <script src="https://telegram.org"></script>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         body { 
-            background: #0f172a; 
-            color: white; 
-            font-family: 'Poppins', sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            text-align: center; 
-            user-select: none;
+            background: #0f172a; color: white; font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden;
         }
-        /* টপ প্রোফাইল সেকশন */
-        .header { 
-            padding: 25px; 
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); 
-            border-bottom: 2px solid #3b82f6; 
-        }
+        /* প্রোফাইল সেকশন ফিক্স */
+        .header { padding: 20px; background: #1e293b; border-bottom: 2px solid #3b82f6; text-align: center; }
+        .profile-container { position: relative; width: 80px; height: 80px; margin: 0 auto 10px; }
         .profile-pic { 
-            width: 90px; 
-            height: 90px; 
-            border-radius: 50%; 
-            border: 3px solid #3b82f6; 
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-            margin-bottom: 10px;
+            width: 100%; height: 100%; border-radius: 50%; border: 3px solid #3b82f6; 
+            object-fit: cover; background: #334155;
         }
-        .uid-tag { 
-            background: linear-gradient(90deg, #3b82f6, #1d4ed8); 
-            padding: 4px 15px; 
-            border-radius: 20px; 
-            font-size: 12px; 
-            font-weight: bold;
-            display: inline-block;
-        }
+        .uid-tag { background: #3b82f6; padding: 3px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; }
+
         /* নোটিশ বোর্ড */
-        .notice { 
-            background: rgba(239, 68, 68, 0.1); 
-            border-left: 5px solid #ef4444; 
-            margin: 15px; 
-            padding: 12px; 
-            font-size: 13px; 
-            text-align: left;
-            border-radius: 5px;
-        }
-        /* ব্যালেন্স কার্ড */
-        .balance-card {
-            margin: 20px auto;
-            width: 85%;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        #bal { font-size: 28px; color: #10b981; font-weight: bold; }
+        .notice { background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; margin: 10px; padding: 10px; font-size: 12px; text-align: left; border-radius: 5px; }
 
-        /* ৩ডি বাটন গ্রিড */
-        .grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 15px; 
-            padding: 15px; 
-            margin-bottom: 100px;
-        }
-        .btn { 
-            background: #ffffff; 
-            color: #0f172a; 
-            padding: 22px 10px; 
-            border-radius: 18px; 
-            font-weight: bold; 
-            font-size: 14px;
-            box-shadow: 0 6px 0 #cbd5e1; 
-            cursor: pointer; 
-            transition: 0.1s;
-        }
-        .btn:active { 
-            transform: translateY(4px); 
-            box-shadow: 0 2px 0 #cbd5e1; 
-        }
+        /* ব্যালেন্স */
+        .balance-card { margin: 15px auto; text-align: center; }
+        #bal { font-size: 32px; color: #10b981; font-weight: bold; }
 
-        /* বটম নেভিগেশন */
+        /* বাটন গ্রিড */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 15px; }
+        .btn { background: white; color: #0f172a; padding: 18px 5px; border-radius: 12px; font-weight: bold; font-size: 13px; box-shadow: 0 5px #cbd5e1; text-align: center; cursor: pointer; }
+        .btn:active { transform: translateY(3px); box-shadow: 0 2px #cbd5e1; }
+
+        /* নেভিগেশন বার ফিক্স */
         .nav { 
-            position: fixed; 
-            bottom: 10px; 
-            width: 92%; 
-            left: 4%; 
-            background: #ffffff; 
-            display: flex; 
-            justify-content: space-around; 
-            padding: 12px 0; 
-            border-radius: 25px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: absolute; bottom: 0; width: 100%; background: #ffffff; 
+            display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
         }
-        .nav-item { color: #64748b; font-size: 11px; font-weight: 600; cursor: pointer; }
+        .nav-item { color: #64748b; font-size: 11px; font-weight: 600; text-align: center; flex: 1; }
         .nav-item.active { color: #3b82f6; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <img id="u_pic" class="profile-pic" src="https://placeholder.com" alt="Profile">
-        <div id="u_name" style="font-size: 18px; font-weight: 600; margin-bottom: 5px;">User Name</div>
+        <div class="profile-container">
+            <img id="u_pic" class="profile-pic" src="https://ui-avatars.com" alt="P">
+        </div>
+        <div id="u_name" style="font-weight: 600; margin-bottom: 5px;">Loading...</div>
         <div class="uid-tag">UID: <span id="u_id">000000000</span></div>
     </div>
 
     <div class="notice">
-        📢 <b>নিরাপদ নোটিশ:</b> <br>
-        - ২টি ভিডিও অ্যাড (২৫+২৫ সে.) অবশ্যই সম্পূর্ণ দেখুন। <br>
-        - আপনার রেফার করা মেম্বার ১০টি অ্যাড দেখলে তবেই রেফার বোনাস পাবেন। <br>
-        - মিনিমাম উইথড্র ২০ টাকা (বিকাশ/নগদ)।
+        📢 <b>নোটিশ:</b> ২টি ভিডিও অ্যাড অবশ্যই সম্পূর্ণ দেখুন। আপনার রেফার করা মেম্বার ১০টি অ্যাড দেখলে বোনাস পাবেন। মিনিমাম উইথড্র ২০ টাকা।
     </div>
 
     <div class="balance-card">
-        <div style="font-size: 14px; color: #94a3b8;">Current Balance</div>
+        <div style="font-size: 12px; color: #94a3b8;">Current Balance</div>
         <div>৳ <span id="bal">0.00</span></div>
     </div>
 
     <div class="grid">
-        <div class="btn" onclick="handleAds()">WATCH ADS</div>
-        <div class="btn" onclick="alert('VIP Levels (1-20) Coming Soon!')">VIP REWARDS</div>
-        <div class="btn" onclick="alert('Total Income History Page')">TOTAL INCOME</div>
-        <div class="btn" onclick="alert('Withdraw System (Bikash/Nogod)')">WITHDRAW</div>
+        <div class="btn" onclick="startTask()">WATCH ADS</div>
+        <div class="btn" onclick="alert('VIP Levels Locked')">VIP REWARDS</div>
+        <div class="btn" onclick="alert('Income History')">TOTAL INCOME</div>
+        <div class="btn" onclick="alert('Withdraw System')">WITHDRAW</div>
     </div>
 
     <div class="nav">
@@ -139,26 +78,24 @@
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
+        tg.ready();
 
-        // ইউজার ডাটা সেট করা
-        document.getElementById('u_name').innerText = tg.initDataUnsafe.user.first_name;
-        document.getElementById('u_id').innerText = tg.initDataUnsafe.user.id;
+        document.getElementById('u_name').innerText = tg.initDataUnsafe.user.first_name || "User";
+        document.getElementById('u_id').innerText = tg.initDataUnsafe.user.id || "000000";
         if(tg.initDataUnsafe.user.photo_url) {
             document.getElementById('u_pic').src = tg.initDataUnsafe.user.photo_url;
         }
 
-        // অ্যাড দেখার লজিক (২৫+২৫ সেকেন্ড)
-        function handleAds() {
-            alert("অ্যাড ১ লোড হচ্ছে... (২৫ সেকেন্ড অপেক্ষা করুন)");
+        function startTask() {
+            alert("অ্যাড ১ শুরু... (২৫ সে.)");
             setTimeout(() => {
-                alert("অ্যাড ২ লোড হচ্ছে... (২৫ সেকেন্ড অপেক্ষা করুন)");
+                alert("অ্যাড ২ শুরু... (২৫ সে.)");
                 setTimeout(() => {
-                    let balanceElement = document.getElementById('bal');
-                    let currentBalance = parseFloat(balanceElement.innerText);
-                    balanceElement.innerText = (currentBalance + 0.15).toFixed(2);
-                    alert("অভিনন্দন! আপনি ১৫ পয়সা পেয়েছেন।");
-                }, 25000); // ২য় অ্যাড ২৫ সেকেন্ড
-            }, 25000); // ১ম অ্যাড ২৫ সেকেন্ড
+                    let b = document.getElementById('bal');
+                    b.innerText = (parseFloat(b.innerText) + 0.15).toFixed(2);
+                    alert("১৫ পয়সা যোগ হয়েছে!");
+                }, 25000);
+            }, 25000);
         }
     </script>
 </body>
