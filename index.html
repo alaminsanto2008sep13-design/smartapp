@@ -6,107 +6,106 @@
     <title>SmartAdBD</title>
     <script src="https://telegram.org"></script>
     <style>
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
-            background: #0f172a; color: white; font-family: 'Segoe UI', Tahoma, sans-serif; 
-            margin: 0; padding: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column;
-        }
+        * { box-sizing: border-box; }
+        body { background: #0f172a; color: white; font-family: sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        .page { display: none; padding: 20px; flex-grow: 1; overflow-y: auto; text-align: center; }
+        .active-page { display: block; }
 
-        /* ১. প্রোফাইল সেকশন - তোর সেই ইউনিক গোল ডিজাইন */
-        .profile-area { padding-top: 15px; text-align: center; background: #1e293b; padding-bottom: 10px; border-bottom: 1px solid #3b82f6; }
-        .u-pic { 
-            width: 65px; height: 65px; border-radius: 50%; border: 2.5px solid #3b82f6; 
-            margin: 0 auto 8px; object-fit: cover; background: #334155; display: block;
-        }
-        .u-name { font-size: 16px; font-weight: bold; margin-bottom: 4px; display: block; }
-        .u-id { background: #3b82f6; color: white; padding: 2px 12px; border-radius: 12px; font-size: 10px; font-weight: bold; display: inline-block; }
+        /* হোম - শুধু নোটিশ */
+        .notice-card { background: rgba(239, 68, 68, 0.15); border-left: 4px solid #ef4444; padding: 15px; text-align: left; margin-top: 30px; border-radius: 8px; font-size: 14px; }
 
-        /* ২. নোটিশ বোর্ড */
-        .notice-board { 
-            background: rgba(239, 68, 68, 0.15); border-left: 4px solid #ef4444; 
-            margin: 12px 15px; padding: 10px; font-size: 11.5px; text-align: left; border-radius: 4px;
-        }
+        /* ৩ডি বাটন স্টাইল */
+        .custom-btn { background: #fff; color: #0f172a; padding: 18px; border-radius: 12px; font-weight: bold; box-shadow: 0 5px #cbd5e1; cursor: pointer; margin-bottom: 15px; width: 100%; display: block; text-decoration: none; }
+        .custom-btn:active { transform: translateY(3px); box-shadow: 0 2px #cbd5e1; }
 
-        /* ৩. কারেন্ট ব্যালেন্স */
-        .bal-container { text-align: center; margin-bottom: 10px; }
-        .bal-title { font-size: 12px; color: #94a3b8; }
-        .bal-num { font-size: 32px; color: #10b981; font-weight: bold; margin-top: 2px; }
+        /* প্রোফাইল ডিজাইন */
+        .p-pic { width: 85px; height: 85px; border-radius: 50%; border: 3px solid #3b82f6; margin: 0 auto 10px; }
+        .bal-txt { font-size: 32px; color: #10b981; font-weight: bold; margin: 10px 0; }
+        .uid-tag { background: #3b82f6; padding: 3px 15px; border-radius: 15px; font-size: 11px; display: inline-block; margin-bottom: 20px; }
 
-        /* ৪. বাটন গ্রিড - সাইজ একদম লক করা */
-        .btn-grid { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; 
-            padding: 0 15px; margin-top: 5px;
-        }
-        .custom-btn { 
-            background: #ffffff; color: #0f172a; height: 65px; /* ফিক্সড ছোট সাইজ */
-            border-radius: 12px; font-weight: bold; font-size: 12.5px; 
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4.5px 0 #cbd5e1; cursor: pointer; text-align: center;
-        }
-        .custom-btn:active { transform: translateY(2.5px); box-shadow: 0 1px 0 #cbd5e1; }
-
-        /* ৫. বটম নেভিগেশন - স্টিকি ও ফিক্সড */
-        .footer-nav { 
-            margin-top: auto; background: #ffffff; display: flex; 
-            justify-content: space-around; padding: 12px 0; border-top: 1px solid #e2e8f0;
-        }
-        .nav-link { color: #64748b; font-size: 11.5px; font-weight: 600; flex: 1; text-align: center; text-decoration: none; }
-        .nav-link.active { color: #3b82f6; }
+        /* নেভিগেশন বার */
+        .footer { background: #fff; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -5px 10px rgba(0,0,0,0.2); }
+        .nav-btn { color: #64748b; font-size: 11px; font-weight: bold; flex: 1; text-align: center; cursor: pointer; }
+        .nav-active { color: #3b82f6; }
     </style>
 </head>
 <body>
 
-    <div class="profile-area">
-        <img id="p_img" class="u-pic" src="https://ui-avatars.com">
-        <span id="p_name" class="u-name">Loading User...</span>
-        <div class="u-id">UID: <span id="p_id">000000000</span></div>
+    <!-- ১. হোম পেজ (শুধু নোটিশ) -->
+    <div id="home" class="page active-page">
+        <h2 style="color: #3b82f6; margin-top: 10px;">Notice Board</h2>
+        <div class="notice-card">
+            📢 <b>গুরুত্বপূর্ণ নোটিশ:</b> <br><br>
+            - ২টি ভিডিও অ্যাড অবশ্যই সম্পূর্ণ দেখুন। <br>
+            - রেফার বোনাস পেতে মেম্বারকে অন্তত ১০টি অ্যাড দেখতে হবে। <br>
+            - মিনিমাম উইথড্র ২০ টাকা।
+        </div>
     </div>
 
-    <div class="notice-board">
-        📢 <b>নিরাপদ নোটিশ:</b> ২টি ভিডিও অ্যাড অবশ্যই সম্পূর্ণ দেখুন। আপনার রেফার করা মেম্বার ১০টি অ্যাড দেখলে তবেই বোনাস পাবেন। মিনিমাম উইথড্র ২০ টাকা।
+    <!-- ২. টাস্ক পেজ (শুধু ওয়াচ অ্যাড) -->
+    <div id="tasks" class="page">
+        <h2 style="color: #3b82f6;">Tasks</h2>
+        <div class="custom-btn" style="margin-top: 50px;" onclick="runAds()">WATCH ADS (2 Videos)</div>
     </div>
 
-    <div class="bal-container">
-        <div class="bal-title">Current Balance</div>
-        <div class="bal-num">৳ <span id="main_balance">0.00</span></div>
+    <!-- ৩. প্রোফাইল পেজ (সব ডিটেইলস ও রিওয়ার্ডস) -->
+    <div id="profile" class="page">
+        <h2 style="color: #3b82f6;">My Profile</h2>
+        <img id="u_img" class="p-pic" src="https://ui-avatars.com">
+        <div id="u_name" style="font-weight: bold; font-size: 18px;">User Name</div>
+        <div class="uid-tag">UID: <span id="u_id">000000000</span></div>
+        <div style="font-size: 14px; color: #94a3b8;">Current Balance</div>
+        <div class="bal-txt">৳ <span id="balance">0.00</span></div>
+        
+        <div style="margin-top: 20px;">
+            <div class="custom-btn" onclick="alert('Total Income List Loading...')">TOTAL INCOME</div>
+            <div class="custom-btn" onclick="alert('VIP Rewards (Level 1-20)')">VIP REWARDS</div>
+        </div>
     </div>
 
-    <div class="btn-grid">
-        <div class="custom-btn" onclick="runAds()">WATCH ADS</div>
-        <div class="custom-btn" onclick="alert('VIP 1-20 Locked')">VIP REWARDS</div>
-        <div class="custom-btn" onclick="alert('Income History')">TOTAL INCOME</div>
-        <div class="custom-btn" onclick="alert('Withdraw System')">WITHDRAW</div>
+    <!-- ৪. উইথড্র পেজ -->
+    <div id="withdraw" class="page">
+        <h2 style="color: #3b82f6;">Withdraw</h2>
+        <div class="custom-btn" onclick="alert('বিকাশ/নগদ নম্বর দিন')">WITHDRAW (Bikash/Nogod)</div>
+        <div style="text-align: left; background: #1e293b; padding: 15px; border-radius: 8px; margin-top: 20px;">
+            <h4 style="margin-top: 0;">Referral History:</h4>
+            <p id="ref_list" style="font-size: 12px; color: #94a3b8;">আপনার রেফার করা মেম্বারদের লিস্ট এখানে দেখাবে।</p>
+        </div>
     </div>
 
-    <div class="footer-nav">
-        <div class="nav-link active">Home</div>
-        <div class="nav-link">Earn</div>
-        <div class="nav-link">Tasks</div>
-        <div class="nav-link">Refer</div>
-        <div class="nav-link">Profile</div>
+    <!-- বটম মেনু -->
+    <div class="footer">
+        <div class="nav-btn nav-active" onclick="showPage('home', this)">Home</div>
+        <div class="nav-btn" onclick="showPage('tasks', this)">Tasks</div>
+        <div class="nav-btn" onclick="showPage('profile', this)">Profile</div>
+        <div class="nav-btn" onclick="showPage('withdraw', this)">Withdraw</div>
     </div>
 
     <script>
-        let webapp = window.Telegram.WebApp;
-        webapp.expand();
-        webapp.ready();
+        let tg = window.Telegram.WebApp;
+        tg.expand();
 
-        // ইউজার ডাটা ফিক্স
-        let userData = webapp.initDataUnsafe.user;
-        if (userData) {
-            document.getElementById('p_name').innerText = userData.first_name + (userData.last_name ? " " + userData.last_name : "");
-            document.getElementById('p_id').innerText = userData.id;
-            if (userData.photo_url) document.getElementById('p_img').src = userData.photo_url;
+        function showPage(pageId, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(pageId).classList.add('active-page');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
+            btn.classList.add('nav-active');
+        }
+
+        if (tg.initDataUnsafe.user) {
+            let u = tg.initDataUnsafe.user;
+            document.getElementById('u_name').innerText = u.first_name + (u.last_name ? " " + u.last_name : "");
+            document.getElementById('u_id').innerText = u.id;
+            if (u.photo_url) document.getElementById('u_img').src = u.photo_url;
         }
 
         function runAds() {
-            alert("১ম অ্যাড লোড হচ্ছে (২৫ সেকেন্ড)...");
+            alert("১ম অ্যাড শুরু... (২৫ সেকেন্ড)");
             setTimeout(() => {
-                alert("২য় অ্যাড লোড হচ্ছে (২৫ সেকেন্ড)...");
+                alert("২য় অ্যাড শুরু... (২৫ সেকেন্ড)");
                 setTimeout(() => {
-                    let b = document.getElementById('main_balance');
-                    let current = parseFloat(b.innerText);
-                    b.innerText = (current + 0.15).toFixed(2);
+                    let b = document.getElementById('balance');
+                    b.innerText = (parseFloat(b.innerText) + 0.15).toFixed(2);
                     alert("অভিনন্দন! ১৫ পয়সা যোগ হয়েছে।");
                 }, 25000);
             }, 25000);
